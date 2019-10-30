@@ -32,11 +32,15 @@ class StudentAI():
         return move
 
     def available_moves_and_checker_num_heuristic(self, board, color):
-        pass
+        if color == 1:
+            return board.black_count - board.white_count
+        else:
+            return board.white_count - board.black_count
 
     def checker_num_heuristic(self, board, color):
         pass
 
+    '''
     def optimal_move_iterative(self, iteration, color) -> int:
         optimal_move_index = 0
         board_copied = self.board
@@ -45,3 +49,6 @@ class StudentAI():
             for m in moves:
                 board_copied.make_move()
         return optimal_move_index
+    '''
+
+    def optimal_move(self, ):
