@@ -17,10 +17,15 @@ class StudentAI():
         self.color = 2
 
     def get_move(self, move):
+        #opponent made a move
         if len(move) != 0:
+            #add opponent's move in own board
             self.board.make_move(move, self.opponent[self.color])
         else:
             self.color = 1
+        
+        #get our all possible moves
+        #moves: [[Move([(self.row,self.col),(pos_x,pos_y)])]]
         moves = self.board.get_all_possible_moves(self.color)
         # index = randint(0, len(moves)-1)
         # inner_index = randint(0, len(moves[index])-1)
@@ -45,3 +50,12 @@ class StudentAI():
             for m in moves:
                 board_copied.make_move()
         return optimal_move_index
+    
+    #TODO: filter the lose moves in 2 situations (play 1 and play 2)
+    #Check and filter the next moves that will not cause to lose our checkers
+    #moves: [[Move([(self.row,self.col),(pos_x,pos_y)])]]
+    def filter_lose_move(self,moves):
+        current_board = self.board.board
+        pass
+
+    #TODO: choose the moves that can capture the opponent's checkers
