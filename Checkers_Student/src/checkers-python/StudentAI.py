@@ -22,9 +22,26 @@ class StudentAI():
         else:
             self.color = 1
         moves = self.board.get_all_possible_moves(self.color)
-        index = randint(0, len(moves)-1)
-        inner_index = randint(0, len(moves[index])-1)
+        # index = randint(0, len(moves)-1)
+        # inner_index = randint(0, len(moves[index])-1)
+
+        index = 0
+        inner_index = 0
         move = moves[index][inner_index]
         self.board.make_move(move, self.color)
         return move
 
+    def available_moves_and_checker_num_heuristic(self, board, color):
+        pass
+
+    def checker_num_heuristic(self, board, color):
+        pass
+
+    def optimal_move_iterative(self, iteration, color) -> int:
+        optimal_move_index = 0
+        board_copied = self.board
+        moves = board_copied.get_all_possible_moves(color)
+        if iteration == 0:
+            for m in moves:
+                board_copied.make_move()
+        return optimal_move_index
