@@ -40,8 +40,12 @@ class StudentAI():
         pass
 
     def checker_num_heuristic(self, board, color):
-        pass
+        if color == 1:
+            return board.black_count - board.white_count
+        else:
+            return board.white_count - board.black_count
 
+    '''
     def optimal_move_iterative(self, iteration, color) -> int:
         optimal_move_index = 0
         board_copied = self.board
@@ -50,12 +54,30 @@ class StudentAI():
             for m in moves:
                 board_copied.make_move()
         return optimal_move_index
-    
+    '''
+
+    def optimal_move(self) -> (int, int):
+        max_heuristic = 0
+        result = (0, 0)
+        moves = self.board.get_all_possible_moves(self.color)
+        for i in range(len(moves)):
+            for j in range(len(moves[i])):
+                self.board.make_move(moves[i][j], self.color)
+                if self.checker_num_heuristic(self.board, self.color) > max_heuristic:
+                    max_heuristic = self.checker_num_heuristic(self.board, self.color)
+                    result = (i, j)
+                    self.board.undo()
+        return result
+
+
+
+
     #TODO: filter the lose moves in 2 situations (play 1 and play 2)
     #Check and filter the next moves that will not cause to lose our checkers
-    #moves: [[Move([(self.row,self.col),(pos_x,pos_y)])]]
+    #*v
     def filter_lose_move(self,moves):
         current_board = self.board.board
         pass
 
     #TODO: choose the moves that can capture the opponent's checkers
+
