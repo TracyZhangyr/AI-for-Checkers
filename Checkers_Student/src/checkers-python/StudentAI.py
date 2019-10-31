@@ -56,6 +56,12 @@ class StudentAI():
         return optimal_move_index
     '''
 
+    def opposite_color(self, color):
+        if color == 1:
+            return 0
+        else:
+            return 1
+
     def optimal_move(self) -> (int, int):
         max_heuristic = 0
         result = (0, 0)
@@ -63,10 +69,13 @@ class StudentAI():
         for i in range(len(moves)):
             for j in range(len(moves[i])):
                 self.board.make_move(moves[i][j], self.color)
+                if self.board.is_win(self.opposite_color(self.color)):
+                    self.board.undo()
+                    continue
                 if self.checker_num_heuristic(self.board, self.color) > max_heuristic:
                     max_heuristic = self.checker_num_heuristic(self.board, self.color)
                     result = (i, j)
-                    self.board.undo()
+                self.board.undo()
         return result
 
 
