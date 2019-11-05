@@ -59,13 +59,13 @@ class StudentAI():
     def opposite_color(self,color):
         return self.opponent[color]
 
-    def optimal_move(self, moves) -> "moves:(int,int)":
+    def optimal_move(self, moves) ->"moves:(int,int)":
         max_heuristic = 0
-        result = (0, 0)
+        result = (0,0)
         for i in range(len(moves)):
             for j in range(len(moves[i])):
                 self.board.make_move(moves[i][j], self.color)
-                if self.board.is_win(self.opposite_color(self.color)):
+                if self.board.is_win(self.opposite_color(self.color))==self.opposite_color(self.color):
                     self.board.undo()
                     continue
                 if self.checker_num_heuristic(self.board, self.color) > max_heuristic:
@@ -74,13 +74,94 @@ class StudentAI():
                 self.board.undo()
         return result
 
+    def opponent_letter(self):
+        if self.color == 1:
+            return 'W'
+        else:
+            return 'B'
+
+    def filter_lose_move(self, moves, index):
+        board = self.board.board
+        new_pos = moves[index[0][0]][index[0][1]].seq[-1]
+        x = new_pos[0]
+        y = new_pos[1]
+        if self.board.is_in_board(x + 1, y + 1) and self.board.is_in_board(x - 1, y - 1):
+            if board[x + 1][y + 1].color == self.opponent_letter() and board[x - 1][y - 1].color == ".":
+                if self.color == 1:
+                    return False
+                else:
+                    if board[x + 1][y + 1].is_king:
+                        return False
+            if board[x + 1][y + 1].color == "." and board[x - 1][y - 1].color == self.opponent_letter():
+                if self.color == 2:
+                    return False
+                else:
+                    if board[x - 1][y - 1].is_king:
+                        return False
+        if self.board.is_in_board(x + 1, y - 1) and self.board.is_in_board(x - 1, y + 1):
+            if (board[x + 1][y - 1].color == self.opponent_letter()) and (board[x - 1][y + 1].color == "."):
+                if self.color == 1:
+                    return False
+                else:
+                    if board[x + 1][y - 1].is_king:
+                        return False
+            if (board[x + 1][y - 1].color == "." ) and (board[x - 1][y + 1].color == self.opponent_letter()):
+                if self.color == 2:
+                    return False
+                else:
+                    if board[x - 1][y + 1].is_king:
+                        return False
+        return True
+
+    def optimal_move_2(self, moves) -> "moves:(int,int)":
+        move_index = dict()
+        for i in range(len(moves)):
+            for j in range(len(moves[i])):
+                self.board.make_move(moves[i][j], self.color)
+                if self.board.is_win(self.color) == self.opposite_color(self.color):
+                    self.board.undo()
+                    continue
+                heuristic = self.checker_num_heuristic(self.board, self.color)
+                move_index[(i,j)] = heuristic
+                self.board.undo()
+        move_index = sorted(move_index.items(), key=lambda item: item[1], reverse=True)
+        result = ''
+        for index in move_index:
+            if self.filter_lose_move(moves,index) is True:
+                result = index
+                break
+            else:
+                continue
+        if result != '':
+            return result[0]
+        else:
+            if len(move_index) != 0:
+                return move_index[0][0]
+            else:
+                return (0,0)
+
+
+
     #TODO: filter the lose moves in 2 situations (play 1 and play 2)
     #Check and filter the next moves that will not cause to lose our checkers
-    #*v
-    '''
-    def filter_lose_move(self,moves):
-        current_board = self.board.board
-        pass
-    '''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
