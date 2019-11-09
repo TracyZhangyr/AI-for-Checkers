@@ -65,7 +65,7 @@ class StudentAI():
         for i in range(len(moves)):
             for j in range(len(moves[i])):
                 self.board.make_move(moves[i][j], self.color)
-                if self.board.is_win(self.opposite_color(self.color))==self.opposite_color(self.color):
+                if self.board.is_win(self.color)==self.color:
                     self.board.undo()
                     continue
                 if self.checker_num_heuristic(self.board, self.color) > max_heuristic:
@@ -73,6 +73,7 @@ class StudentAI():
                     result = (i, j)
                 self.board.undo()
         return result
+
 
     def opponent_letter(self):
         if self.color == 1:
@@ -140,10 +141,6 @@ class StudentAI():
             else:
                 return (0,0)
 
-
-
-    #TODO: filter the lose moves in 2 situations (play 1 and play 2)
-    #Check and filter the next moves that will not cause to lose our checkers
 
 
 
