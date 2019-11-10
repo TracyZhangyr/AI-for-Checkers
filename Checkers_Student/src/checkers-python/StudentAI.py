@@ -83,8 +83,8 @@ class StudentAI():
 
     def min(self,board,color,depth):
         opposite = self.opposite_color(color)
-        #if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
-        if depth == 0 or board.is_win(color) == (0 or 1 or 2):
+        if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
+        #if depth == 0 or board.is_win(color) == (0 or 1 or 2):
             return self.checker_num_heuristic(board,color)
         moves = board.get_all_possible_moves(color)
         best_score = float('inf')
@@ -100,8 +100,8 @@ class StudentAI():
 
     def max(self,board,color,depth):
         opposite = self.opposite_color(color)
-        #if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
-        if depth == 0 or board.is_win(color) == (0 or 1 or 2):
+        if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
+        #if depth == 0 or board.is_win(color) == (0 or 1 or 2):
             return self.checker_num_heuristic(board, color)
         moves = board.get_all_possible_moves(color)
         best_score = float('-inf')
