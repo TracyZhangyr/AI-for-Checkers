@@ -23,20 +23,12 @@ class StudentAI():
             self.board.make_move(move, self.opponent[self.color])
         else:
             self.color = 1
-        
-        #get our all possible moves
+
         #moves: [[Move([(self.row,self.col),(pos_x,pos_y)])]]
-        '''
-        moves = self.board.get_all_possible_moves(self.color)
-        selected_move = self.optimal_move(moves)
-        index = selected_move[0]
-        inner_index = selected_move[1]
-        move = moves[index][inner_index]'''
-
         #TODO: test minimax(depth=4) after adding alpha-beta pruning
-        #      especially when our AI as plauer 1
+        #      especially when our AI as player 1
 
-        move = self.minimax(self.board,self.color,2)
+        move = self.minimax(self.board,self.color,4)
         self.board.make_move(move, self.color)
         return move
 
@@ -63,7 +55,8 @@ class StudentAI():
                 board_copied.make_move()
         return optimal_move_index
     
-'''
+    '''
+
     #TODO: Alpha-beta pruning
 
     def minimax(self,board,color,depth):
@@ -118,6 +111,7 @@ class StudentAI():
 
     def opposite_color(self,color):
         return self.opponent[color]
+
 
     def optimal_move(self, moves) ->"moves:(int,int)":
         max_heuristic = 0
