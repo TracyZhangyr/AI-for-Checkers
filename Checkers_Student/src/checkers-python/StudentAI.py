@@ -26,12 +26,15 @@ class StudentAI():
         
         #get our all possible moves
         #moves: [[Move([(self.row,self.col),(pos_x,pos_y)])]]
+        '''
         moves = self.board.get_all_possible_moves(self.color)
         selected_move = self.optimal_move(moves)
         index = selected_move[0]
         inner_index = selected_move[1]
 
-        move = moves[index][inner_index]
+        move = moves[index][inner_index]'''
+
+        move = self.minimax(self.board,self.color,2)
         self.board.make_move(move, self.color)
         return move
 
@@ -53,7 +56,56 @@ class StudentAI():
             for m in moves:
                 board_copied.make_move()
         return optimal_move_index
-    '''
+    
+'''
+
+
+    def minimax(self,board,color,depth):
+        opposite = self.opposite_color(color)
+        moves = board.get_all_possible_moves(color)
+        best_move = moves[0][0]
+        best_score = float('-inf')
+        for i in range(len(moves)):
+            for j in range(len(moves[i])):
+                board.make_move(moves[i][j], color)
+                score = self.min(board, opposite,depth-1)
+                board.undo()
+                if score > best_score:
+                    best_move = moves[i][j]
+                    best_score = score
+        return best_move
+
+    def min(self,board,color,depth):
+        opposite = self.opposite_color(color)
+        if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
+            return self.checker_num_heuristic(board,color)
+        moves = board.get_all_possible_moves(color)
+        best_score = float('inf')
+        for i in range(len(moves)):
+            for j in range(len(moves[i])):
+                board.make_move(moves[i][j], color)
+                score = self.max(board,opposite,depth-1)
+                board.undo()
+                if score < best_score:
+                    #best_move = moves[i][j]
+                    best_score = score
+        return best_score
+
+    def max(self,board,color,depth):
+        opposite = self.opposite_color(color)
+        if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
+            return self.checker_num_heuristic(board, color)
+        moves = board.get_all_possible_moves(color)
+        best_score = float('-inf')
+        for i in range(len(moves)):
+            for j in range(len(moves[i])):
+                board.make_move(moves[i][j], color)
+                score = self.min(board, opposite,depth-1)
+                board.undo()
+                if score > best_score:
+                    #best_move = moves[i][j]
+                    best_score = score
+        return best_score
 
 
     def opposite_color(self,color):
@@ -74,7 +126,7 @@ class StudentAI():
                 self.board.undo()
         return result
 
-
+'''
     def opponent_letter(self):
         if self.color == 1:
             return 'W'
@@ -140,7 +192,7 @@ class StudentAI():
                 return move_index[0][0]
             else:
                 return (0,0)
-
+'''
 
 
 
