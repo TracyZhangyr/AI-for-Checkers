@@ -25,19 +25,10 @@ class StudentAI():
             self.color = 1
 
         #moves: [[Move([(self.row,self.col),(pos_x,pos_y)])]]
-        #TODO: test minimax(depth=4) after adding alpha-beta pruning
-        #      especially when our AI as player 1
-
         move = self.minimax(self.board,self.color,4)
         self.board.make_move(move, self.color)
         return move
 
-    def available_moves_and_checker_num_heuristic(self, board, color):
-        pass
-
-    #TODO: Combine more heuristic functions
-    #      1. larger weights on kings
-    #      2. Slice the board in half and weight checkers
 
     def checker_num_heuristic(self, board, color):
         if color == 1:
@@ -45,19 +36,6 @@ class StudentAI():
         else:
             return board.white_count - board.black_count
 
-    '''
-    def optimal_move_iterative(self, iteration, color) -> int:
-        optimal_move_index = 0
-        board_copied = self.board
-        moves = board_copied.get_all_possible_moves(color)
-        if iteration == 0:
-            for m in moves:
-                board_copied.make_move()
-        return optimal_move_index
-    
-    '''
-
-    #TODO: Alpha-beta pruning
 
     def minimax(self,board,color,depth):
         opposite = self.opposite_color(color)
@@ -77,7 +55,6 @@ class StudentAI():
     def min(self,board,color,depth):
         opposite = self.opposite_color(color)
         if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
-        #if depth == 0 or board.is_win(color) == (0 or 1 or 2):
             return self.checker_num_heuristic(board,color)
         moves = board.get_all_possible_moves(color)
         best_score = float('inf')
@@ -87,14 +64,12 @@ class StudentAI():
                 score = self.max(board,opposite,depth-1)
                 board.undo()
                 if score < best_score:
-                    #best_move = moves[i][j]
                     best_score = score
         return best_score
 
     def max(self,board,color,depth):
         opposite = self.opposite_color(color)
         if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
-        #if depth == 0 or board.is_win(color) == (0 or 1 or 2):
             return self.checker_num_heuristic(board, color)
         moves = board.get_all_possible_moves(color)
         best_score = float('-inf')
@@ -104,7 +79,6 @@ class StudentAI():
                 score = self.min(board, opposite,depth-1)
                 board.undo()
                 if score > best_score:
-                    #best_move = moves[i][j]
                     best_score = score
         return best_score
 
@@ -112,21 +86,6 @@ class StudentAI():
     def opposite_color(self,color):
         return self.opponent[color]
 
-
-    def optimal_move(self, moves) ->"moves:(int,int)":
-        max_heuristic = 0
-        result = (0,0)
-        for i in range(len(moves)):
-            for j in range(len(moves[i])):
-                self.board.make_move(moves[i][j], self.color)
-                if self.board.is_win(self.color)==self.color:
-                    self.board.undo()
-                    continue
-                if self.checker_num_heuristic(self.board, self.color) > max_heuristic:
-                    max_heuristic = self.checker_num_heuristic(self.board, self.color)
-                    result = (i, j)
-                self.board.undo()
-        return result
 
 
 
