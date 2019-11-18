@@ -25,7 +25,9 @@ class StudentAI():
             self.color = 1
 
         #moves: [[Move([(self.row,self.col),(pos_x,pos_y)])]]
-        move = self.minimax(self.board,self.color,4)
+        #move = self.minimax(self.board,self.color,4)
+        move = self.alpha_beta_search(self.board, self.color, 6)
+
         self.board.make_move(move, self.color)
         return move
 
@@ -87,7 +89,53 @@ class StudentAI():
         return self.opponent[color]
 
 
+    def alpha_beta_search(self,board,color,depth):
+        opposite = self.opposite_color(color)
+        moves = board.get_all_possible_moves(color)
+        best_move = moves[0][0]
+        alpha = float('-inf')
+        beta = float('inf')
+        for i in range(len(moves)):
+            for j in range(len(moves[i])):
+                board.make_move(moves[i][j], color)
+                score = self.min_value(board, opposite,depth-1,alpha,beta)
+                board.undo()
+                if score > alpha:
+                    best_move = moves[i][j]
+                    alpha = score
+        return best_move
 
+    def min_value(self,board,color,depth,al,be):
+        opposite = self.opposite_color(color)
+        if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
+            return self.checker_num_heuristic(board,color)
+        moves = board.get_all_possible_moves(color)
+        score = float('inf')
+        for i in range(len(moves)):
+            for j in range(len(moves[i])):
+                board.make_move(moves[i][j], color)
+                score = min(score, self.max_value(board,opposite,depth-1,al,be))
+                board.undo()
+                if score <= al:
+                    return score
+                be = min(be, score)
+        return be
+
+    def max_value(self,board,color,depth,al,be):
+        opposite = self.opposite_color(color)
+        if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
+            return self.checker_num_heuristic(board, color)
+        moves = board.get_all_possible_moves(color)
+        score = float('-inf')
+        for i in range(len(moves)):
+            for j in range(len(moves[i])):
+                board.make_move(moves[i][j], color)
+                score = max(score, self.min_value(board, opposite,depth-1,al,be))
+                board.undo()
+                if score >= be:
+                    return score
+                al = max(al,score)
+        return score
 
 
 
