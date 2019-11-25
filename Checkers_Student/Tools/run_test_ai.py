@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
         #Our AI as player 1
         p.apply_async(run2, args=(i,))
-        p.apply_async(run4, args=(i,))
+        #p.apply_async(run4, args=(i,))
     print("Start running")
     p.close()
     p.join()
