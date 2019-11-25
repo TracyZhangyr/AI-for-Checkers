@@ -54,15 +54,27 @@ class StudentAI():
     def count_on_edge(self, board, color):
         result = 0
         if color == 1:
-            for i in (0, board.row-1):
-                for j in (0, board.col-1):
-                    if board.board[i][j].color == "B":
-                        result += 1
+            for i in range(board.row):
+                if board.board[i][0].color == "B":
+                    result += 1
+                if board.board[i][board.col].color == "B":
+                    result += 1
+            for j in range(board.col):
+                if board.board[0][j].color == "B":
+                    result += 1
+                if board.board[board.row][j].color == "B":
+                    result += 1
         else:
-            for i in (0, board.row-1):
-                for j in (0, board.col-1):
-                    if board.board[i][j].color == "W":
-                        result += 1
+            for i in range(board.row):
+                if board.board[i][0].color == "W":
+                    result += 1
+                if board.board[i][board.col].color == "W":
+                    result += 1
+            for j in range(board.col):
+                if board.board[0][j].color == "W":
+                    result += 1
+                if board.board[board.row][j].color == "W":
+                    result += 1
         return result
 
     def checker_num_heuristic(self, board, color):
