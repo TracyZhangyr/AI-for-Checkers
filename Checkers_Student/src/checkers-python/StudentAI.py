@@ -209,12 +209,15 @@ class StudentAI():
     def min_value(self,board,color,depth,al,be):
         opposite = self.opposite_color(color)
         moves = board.get_all_possible_moves(color)
+        count_moves = 0
+        for c in moves:
+            count_moves += len(c)
         if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
-            #return self.checker_num_heuristic(board,color)
-            #return self.count_kings_and_pawns(board, color)
-            return self.count_kings_and_pawns_with_distance(board, color) + len(moves)
-            #return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
-        #moves = board.get_all_possible_moves(color)
+            # return self.checker_num_heuristic(board,color)
+            # return self.count_kings_and_pawns(board, color)
+            return self.count_kings_and_pawns_with_distance(board, color) + count_moves * 0.5
+            # return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
+        # moves = board.get_all_possible_moves(color)
         score = float('inf')
         for i in range(len(moves)):
             for j in range(len(moves[i])):
@@ -229,12 +232,15 @@ class StudentAI():
     def max_value(self,board,color,depth,al,be):
         opposite = self.opposite_color(color)
         moves = board.get_all_possible_moves(color)
+        count_moves = 0
+        for c in moves:
+            count_moves += len(c)
         if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
-            #return self.checker_num_heuristic(board, color)
-            return self.count_kings_and_pawns_with_distance(board,color) + len(moves)
-            #return self.count_kings_and_pawns(board, color)
-            #return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
-        #moves = board.get_all_possible_moves(color)
+            # return self.checker_num_heuristic(board, color)
+            return self.count_kings_and_pawns_with_distance(board,color) + count_moves * 0.5
+            # return self.count_kings_and_pawns(board, color)
+            # return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
+        # moves = board.get_all_possible_moves(color)
         score = float('-inf')
         for i in range(len(moves)):
             for j in range(len(moves[i])):
