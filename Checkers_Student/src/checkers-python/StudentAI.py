@@ -31,12 +31,31 @@ class StudentAI():
         self.board.make_move(move, self.color)
         return move
 
+    def count_kings(self, board, color):
+        result = 0
+        if color == 1:
+            for i in range(board.row):
+                for j in range(board.col):
+                    if board[i][j].is_king and board[i][j].color == 1:
+                        result += 1
+        else:
+            for i in range(board.row):
+                for j in range(board.col):
+                    if board[i][j].is_king and board[i][j].color == 0:
+                        result += 1
+        return result
 
     def checker_num_heuristic(self, board, color):
         if color == 1:
             return board.black_count - board.white_count
         else:
             return board.white_count - board.black_count
+
+    def king_num_heuristic(self, board, color):
+        if color == 1:
+            return (board.black_count - board.white_count) + self.count_kings(board, 1) * 0.5
+        else:
+            return (board.white_count - board.black_count) + self.count_kings(board, 0) * 0.5
 
 
     def minimax(self,board,color,depth):
