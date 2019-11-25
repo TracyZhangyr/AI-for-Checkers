@@ -45,6 +45,20 @@ class StudentAI():
                         result += 1
         return result
 
+    def count_on_edge(self, board, color):
+        result = 0
+        if color == 1:
+            for i in (0, board.row):
+                for j in (0, board.col):
+                    if board[i][j].color == 1:
+                        result += 1
+        else:
+            for i in (0, board.row):
+                for j in (0, board.col):
+                    if board[i][j].color == 0:
+                        result += 1
+        return result
+
     def checker_num_heuristic(self, board, color):
         if color == 1:
             return board.black_count - board.white_count
@@ -53,9 +67,12 @@ class StudentAI():
 
     def king_num_heuristic(self, board, color):
         if color == 1:
-            return (board.black_count - board.white_count) + self.count_kings(board, 1) * 0.5
+            return (board.black_count - board.white_count) + self.count_kings(board, color) * 2
         else:
-            return (board.white_count - board.black_count) + self.count_kings(board, 0) * 0.5
+            return (board.white_count - board.black_count) + self.count_kings(board, color) * 2
+
+    def on_edge_heuristic(self, board, color):
+        return self.count_on_edge(board, color) * 1.5
 
 
     def minimax(self,board,color,depth):
