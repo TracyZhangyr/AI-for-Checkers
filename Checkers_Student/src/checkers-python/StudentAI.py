@@ -85,9 +85,9 @@ class StudentAI():
 
     def king_num_heuristic(self, board, color):
         if color == 1:
-            return (board.black_count - board.white_count) + self.count_kings(board, color) * 2
+            return (board.black_count - board.white_count) + (self.count_kings(board, color) - self.count_kings(board, 2))* 2
         else:
-            return (board.white_count - board.black_count) + self.count_kings(board, color) * 2
+            return (board.white_count - board.black_count) + (self.count_kings(board, color) - self.count_kings(board, 1))* 2
 
     def on_edge_heuristic(self, board, color):
         return self.count_on_edge(board, color) * 1.5
@@ -111,9 +111,30 @@ class StudentAI():
                     else:
                         white_pawns += 1
         if color == 1:
-            return (5*black_kings + black_pawns) - (5*white_kings + white_pawns)
+            return (1.5*black_kings + black_pawns) - (1.5*white_kings + white_pawns)
         else:
-            return (5*white_kings + white_pawns) - (5*black_kings + black_pawns)
+            return (1.5*white_kings + white_pawns) - (1.5*black_kings + black_pawns)
+
+    def count_kings_and_pawns_with_distance(self, board, color):
+        black_score = 0
+        white_score = 0
+        for row in range(board.row):
+            for col in range(board.col):
+                checker = board.board[row][col]
+                if checker.color == "B":
+                    if checker.is_king:
+                        black_score += 1.5
+                    else:
+                        black_score += 1
+                elif checker.color == "W":
+                    if checker.is_king:
+                        white_score += 1.5
+                    else:
+                        white_score += 1
+        if color == 1:
+            return black_score - white_score
+        else:
+            return white_score - black_score
 
 
     def minimax(self,board,color,depth):
@@ -166,6 +187,9 @@ class StudentAI():
         return self.opponent[color]
 
 
+
+
+
     def alpha_beta_search(self,board,color,depth):
         opposite = self.opposite_color(color)
         moves = board.get_all_possible_moves(color)
@@ -184,10 +208,13 @@ class StudentAI():
 
     def min_value(self,board,color,depth,al,be):
         opposite = self.opposite_color(color)
+        moves = board.get_all_possible_moves(color)
         if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
             #return self.checker_num_heuristic(board,color)
-            return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
-        moves = board.get_all_possible_moves(color)
+            #return self.count_kings_and_pawns(board, color)
+            return self.count_kings_and_pawns_with_distance(board, color) + len(moves)
+            #return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
+        #moves = board.get_all_possible_moves(color)
         score = float('inf')
         for i in range(len(moves)):
             for j in range(len(moves[i])):
@@ -201,10 +228,13 @@ class StudentAI():
 
     def max_value(self,board,color,depth,al,be):
         opposite = self.opposite_color(color)
+        moves = board.get_all_possible_moves(color)
         if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
             #return self.checker_num_heuristic(board, color)
-            return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
-        moves = board.get_all_possible_moves(color)
+            return self.count_kings_and_pawns_with_distance(board,color) + len(moves)
+            #return self.count_kings_and_pawns(board, color)
+            #return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
+        #moves = board.get_all_possible_moves(color)
         score = float('-inf')
         for i in range(len(moves)):
             for j in range(len(moves[i])):
