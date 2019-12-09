@@ -6,15 +6,11 @@ We are following the javadoc docstring format which is:
 @return tag describes what the function returns
 @raise tag describes the errors this function can raise
 """
-import os
-import sys
-
-sys.path.append("./Sample_AIs/Random_AI/")
-sys.path.append("./Sample_AIs/Random_AI/AI_Extensions/")
 
 from GameLogic import GameLogic
+import sys
+sys.path.append("./")
 from socket import *
-
 def network_init():
     """
     This function sets up a network connection to the ICS servers incase you want to play against another AI connected to the network.
@@ -88,8 +84,7 @@ if __name__ == "__main__":
 
             main = GameLogic(col, row, k, 'n', debug=True)
             try:
-                #main.Run(mode=host_flag, ai_path=ai_path, info=response, time=1200)
-                main.Run(mode=host_flag, ai_path=ai_path, info=response, time=480)
+                main.Run(mode=host_flag, ai_path=ai_path, info=response, time=1200)
             except:
                 import traceback
                 traceback.print_exc()
@@ -120,7 +115,10 @@ if __name__ == "__main__":
     elif mode == 't':
         main.Run(mode=mode)
 
+    elif mode == 's' or mode == 'self':
+        order = sys.argv[5]
+        main.Run(mode=mode,order=order)
+
     elif mode == 'l':
         ai_path_1,ai_path_2 =  sys.argv[5],sys.argv[6]
-        #main.Run(mode=mode,ai_path_1=ai_path_1,ai_path_2=ai_path_2,time=1200)
-        main.Run(mode=mode, ai_path_1=ai_path_1, ai_path_2=ai_path_2, time=480)
+        main.Run(mode=mode,ai_path_1=ai_path_1,ai_path_2=ai_path_2,time=1200)
