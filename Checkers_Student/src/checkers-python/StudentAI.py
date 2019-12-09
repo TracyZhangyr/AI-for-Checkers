@@ -29,7 +29,7 @@ class StudentAI():
 
         #moves: [[Move([(self.row,self.col),(pos_x,pos_y)])]]
         #move = self.minimax(self.board,self.color,4)
-        move = self.alpha_beta_search(self.board, self.color, 6)
+        move = self.alpha_beta_search(self.board, self.color, 4)
 
         self.board.make_move(move, self.color)
 
@@ -213,8 +213,8 @@ class StudentAI():
         #for c in moves:
             #count_moves += len(c)
         if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
-            #return self.checker_num_heuristic(board,color)
-             return self.count_kings_and_pawns_with_distance(board, color)
+            return self.checker_num_heuristic(board,color)
+            #return self.count_kings_and_pawns_with_distance(board, color)
             #return self.count_kings_and_pawns_with_distance(board, color) + count_moves * 0.5
             # return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
         moves = board.get_all_possible_moves(color)
@@ -236,8 +236,8 @@ class StudentAI():
         #for c in moves:
         #    count_moves += len(c)
         if depth == 0 or board.is_win(opposite) == (0 or 1 or 2):
-            #return self.checker_num_heuristic(board, color)
-            return self.count_kings_and_pawns_with_distance(board, color)
+            return self.checker_num_heuristic(board, color)
+            #return self.count_kings_and_pawns_with_distance(board, color)
             #return self.count_kings_and_pawns_with_distance(board,color) + count_moves * 0.5
         moves = board.get_all_possible_moves(color)
         score = float('-inf')
