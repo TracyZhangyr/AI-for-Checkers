@@ -187,6 +187,45 @@ class StudentAI():
         return self.opponent[color]
 
 
+    def opponent_letter(self):
+        if self.color == 1:
+            return 'W'
+        else:
+            return 'B'
+
+
+    def filter_lose_move(self, moves, index):
+        board = self.board.board
+        new_pos = moves[index[0][0]][index[0][1]].seq[-1]
+        x = new_pos[0]
+        y = new_pos[1]
+        if self.board.is_in_board(x + 1, y + 1) and self.board.is_in_board(x - 1, y - 1):
+            if board[x + 1][y + 1].color == self.opponent_letter() and board[x - 1][y - 1].color == ".":
+                if self.color == 1:
+                    return False
+                else:
+                    if board[x + 1][y + 1].is_king:
+                        return False
+            if board[x + 1][y + 1].color == "." and board[x - 1][y - 1].color == self.opponent_letter():
+                if self.color == 2:
+                    return False
+                else:
+                    if board[x - 1][y - 1].is_king:
+                        return False
+        if self.board.is_in_board(x + 1, y - 1) and self.board.is_in_board(x - 1, y + 1):
+            if (board[x + 1][y - 1].color == self.opponent_letter()) and (board[x - 1][y + 1].color == "."):
+                if self.color == 1:
+                    return False
+                else:
+                    if board[x + 1][y - 1].is_king:
+                        return False
+            if (board[x + 1][y - 1].color == "." ) and (board[x - 1][y + 1].color == self.opponent_letter()):
+                if self.color == 2:
+                    return False
+                else:
+                    if board[x - 1][y + 1].is_king:
+                        return False
+        return True
 
 
 
