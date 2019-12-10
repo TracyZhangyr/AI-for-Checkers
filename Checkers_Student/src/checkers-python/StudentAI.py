@@ -193,7 +193,37 @@ class StudentAI():
         else:
             return 'B'
 
+    def lose_move(self, move):
+        board = self.board.board
+        new_pos = move.seq[-1]
+        x = new_pos[0]
+        y = new_pos[1]
+        if x == 0 or x == self.board.row - 1 or y == 0 or y == self.board.col - 1:
+            return False
+        elif (board[x + 1][y + 1].color == self.opponent_letter()) and (board[x - 1][y - 1].color == "."):
+            if self.color == 1:
+                return True
+            elif board[x + 1][y + 1].is_king:
+                return True
+        elif (board[x + 1][y + 1].color == ".") and (board[x - 1][y - 1].color == self.opponent_letter()):
+            if self.color == 2:
+                return True
+            elif board[x - 1][y - 1].is_king:
+                return True
+        elif (board[x + 1][y - 1].color == self.opponent_letter()) and (board[x - 1][y + 1].color == "."):
+            if self.color == 1:
+                return True
+            elif board[x + 1][y - 1].is_king:
+                return True
+        elif (board[x + 1][y - 1].color == ".") and (board[x - 1][y + 1].color == self.opponent_letter()):
+            if self.color == 2:
+                return True
+            elif board[x - 1][y + 1].is_king:
+                return True
+        else:
+            return False
 
+    '''
     def filter_lose_move(self, moves, index):
         board = self.board.board
         new_pos = moves[index[0][0]][index[0][1]].seq[-1]
@@ -226,7 +256,7 @@ class StudentAI():
                     if board[x - 1][y + 1].is_king:
                         return False
         return True
-
+    '''
 
 
     def alpha_beta_search(self,board,color,depth):
@@ -257,15 +287,27 @@ class StudentAI():
             #return self.count_kings_and_pawns_with_distance(board, color) + count_moves * 0.5
             # return self.king_num_heuristic(board, color) + self.on_edge_heuristic(board, color)
         moves = board.get_all_possible_moves(color)
-        score = float('inf')
+        score = float('-inf')
+        lose_score = float('-inf')
+        lose = 0
         for i in range(len(moves)):
             for j in range(len(moves[i])):
                 board.make_move(moves[i][j], color)
-                score = min(score, self.max_value(board,opposite,depth-1,al,be))
-                board.undo()
-                if score <= al:
-                    return score
-                be = min(be, score)
+                if self.lose_move(moves[i][j]):
+                    lose += 1
+                    lose_score = min(score, self.min_value(board, opposite, depth - 1, al, be))
+                    board.undo()
+                    if lose_score <= be:
+                        return score
+                else:
+                    score = min(score, self.min_value(board, opposite, depth - 1, al, be))
+                    board.undo()
+                    if score <= be:
+                        return score
+                if lose != 0:
+                    be = min(be, lose_score)
+                else:
+                    be = min(be, score)
         return be
 
     def max_value(self,board,color,depth,al,be):
@@ -280,15 +322,27 @@ class StudentAI():
             #return self.count_kings_and_pawns_with_distance(board,color) + count_moves * 0.5
         moves = board.get_all_possible_moves(color)
         score = float('-inf')
+        lose_score = float('-inf')
+        not_lose = 0
         for i in range(len(moves)):
             for j in range(len(moves[i])):
                 board.make_move(moves[i][j], color)
-                score = max(score, self.min_value(board, opposite,depth-1,al,be))
-                board.undo()
-                if score >= be:
-                    return score
-                al = max(al,score)
-        return score
+                if not self.lose_move(moves[i][j]):
+                    not_lose += 1
+                    score = max(score, self.min_value(board, opposite,depth-1,al,be))
+                    board.undo()
+                    if score >= be:
+                        return score
+                else:
+                    lose_score = max(score, self.min_value(board, opposite,depth-1,al,be))
+                    board.undo()
+                    if lose_score >= be:
+                        return lose_score
+                if not_lose != 0:
+                    al = max(al, score)
+                else:
+                    al = max(al, lose_score)
+        return score if not_lose >= 0 else lose_score
 
 
 
