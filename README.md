@@ -1,1 +1,1 @@
-# CS171Project
+# AI for Checkers
